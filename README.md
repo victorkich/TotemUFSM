@@ -55,7 +55,6 @@ python3 totem.py
 ## References
 <p align="justify"> 
   This project is inspired by the following GitHub repository:
-  
   <a href="https://github.com/JadHADDAD92/covid-mask-detector">JadHADDAD92</a>
 </p>
 
