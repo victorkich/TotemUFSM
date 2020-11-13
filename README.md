@@ -39,7 +39,7 @@ pip3 install -r requirements.txt
 </p>
 
 ```shell
-python3 predict.py --img your_img.type
+python3 totem.py
 ```
 
 <p align="justify"> 
