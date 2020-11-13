@@ -1,7 +1,4 @@
-""" Face detection using neural network
-"""
 from pathlib import Path
-
 import numpy as np
 from cv2 import resize
 from cv2.dnn import blobFromImage, readNetFromCaffe

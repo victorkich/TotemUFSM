@@ -1,21 +1,8 @@
-""" Training module
-"""
 from pathlib import Path
-from typing import Dict, List, Union
-
-import pandas as pd
 import pytorch_lightning as pl
-import torch
 import torch.nn.init as init
-from pytorch_lightning import Trainer
-from pytorch_lightning.callbacks import ModelCheckpoint
-from sklearn.metrics import accuracy_score
-from sklearn.model_selection import train_test_split
 from torch import Tensor
 from torch.nn import (Conv2d, CrossEntropyLoss, Linear, MaxPool2d, ReLU, Sequential)
-from torch.optim import Adam
-from torch.optim.optimizer import Optimizer
-
 
 
 class MaskDetector(pl.LightningModule):
@@ -61,7 +48,7 @@ class MaskDetector(pl.LightningModule):
                 if isinstance(layer, (Linear, Conv2d)):
                     init.xavier_uniform_(layer.weight)
     
-    def forward(self, x: Tensor): # pylint: disable=arguments-differ
+    def forward(self, x: Tensor):
         """ forward pass
         """
         out = self.convLayer1(x)
@@ -70,20 +57,3 @@ class MaskDetector(pl.LightningModule):
         out = out.view(-1, 2048)
         out = self.linearLayers(out)
         return out
-    
-
-if __name__ == '__main__':
-    model = MaskDetector(Path('covid-mask-detector/data/mask_df.pickle'))
-    
-    checkpoint_callback = ModelCheckpoint(
-        filepath='covid-mask-detector/checkpoints/weights.ckpt',
-        save_weights_only=True,
-        verbose=True,
-        monitor='val_acc',
-        mode='max'
-    )
-    trainer = Trainer(gpus=1 if torch.cuda.is_available() else 0,
-                      max_epochs=10,
-                      checkpoint_callback=checkpoint_callback,
-                      profiler=True)
-    trainer.fit(model)

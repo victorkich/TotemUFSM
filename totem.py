@@ -3,7 +3,6 @@ from facedetector import FaceDetector
 from maskdetector import MaskDetector
 import numpy as np
 import torch
-import time
 import cv2
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -61,6 +60,14 @@ def draw_frame(image, c):
     return image
 
 
+def just_show_frame(img):
+    c = (10, 0, 255)
+    img = draw_frame(img, c)
+    img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+    img = cv2.UMat.get(img)
+    cv2.imshow('UFSM', img)
+
+
 if __name__ == '__main__':
     face_model, mask_model = load_models()
     video = cv2.VideoCapture(0)
@@ -69,8 +76,8 @@ if __name__ == '__main__':
         Resize((100, 100)),
         ToTensor(),
     ])
-    print('Iniciando...')
 
+    print('Iniciando...')
     font = cv2.FONT_HERSHEY_SIMPLEX
     labels = ['Sem Mascara', 'Com Mascara']
     labelColor = [(255, 0, 10), (0, 255, 10)]
@@ -101,36 +108,29 @@ if __name__ == '__main__':
             w = frame.shape[0]
             h = frame.shape[1]
 
-            if width > int(w * 0.35) and height > int(h * 0.35) and int(w * 0.95) > xStart+width > int(w * 0.05) and\
-                    int(h * 0.95) > yStart+height > int(h * 0.05):
-
-                # predict mask label on extracted face
-                faceImg = frame[yStart:yStart + height, xStart:xStart + width]
-                output = mask_model(transformations(faceImg).unsqueeze(0).to(device))
-                _, predicted = torch.max(output.data, 1)
-                color = (0, 255, 10) if predicted else (255, 0, 10)
-                frame = draw_frame(frame, color)
-                cv2.putText(frame, labels[predicted], (int(w * 0.2), int(h * 0.1)), font, 1, color, 2)
-                frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-                frame = cv2.UMat.get(frame)
-
-                video.release()
-                cv2.imshow('UFSM', frame)
-                _ = cv2.waitKey(5000)
-                video = cv2.VideoCapture(0)
-
+            if width > int(w * 0.35) and height > int(h * 0.35):
+                if int(w * 0.9) > xStart+width and xStart > int(w * 0.1):
+                    if int(h * 0.9) > yStart+height and yStart > int(h * 0.1):
+                        faceImg = frame[yStart:yStart + height, xStart:xStart + width]
+                        output = mask_model(transformations(faceImg).unsqueeze(0).to(device))
+                        _, predicted = torch.max(output.data, 1)
+                        frame = draw_frame(frame, labelColor[predicted])
+                        cv2.putText(frame, labels[predicted], (int(w * 0.2), int(h * 0.1)), font, 1,
+                                    labelColor[predicted], 2)
+                        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+                        frame = cv2.UMat.get(frame)
+                        video.release()
+                        cv2.imshow('UFSM', frame)
+                        _ = cv2.waitKey(5000)
+                        video = cv2.VideoCapture(0)
+                    else:
+                        just_show_frame(frame)
+                else:
+                    just_show_frame(frame)
             else:
-                color = (10, 0, 255)
-                frame = draw_frame(frame, color)
-                frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-                frame = cv2.UMat.get(frame)
-                cv2.imshow('UFSM', frame)
+                just_show_frame(frame)
         else:
-            color = (10, 0, 255)
-            frame = draw_frame(frame, color)
-            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-            frame = cv2.UMat.get(frame)
-            cv2.imshow('UFSM', frame)
+            just_show_frame(frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
