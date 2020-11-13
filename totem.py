@@ -136,4 +136,5 @@ if __name__ == '__main__':
 
     video.release()
     cv2.destroyAllWindows()
+    del face_model
     del mask_model
