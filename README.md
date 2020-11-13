@@ -42,10 +42,6 @@ pip3 install -r requirements.txt
 python3 totem.py
 ```
 
-<p align="justify"> 
- <a>The bouding box image and the log.csv will be appear inside the output folder.</a>
-</p>
-
 ## Example
 
 <p align="center"> 
