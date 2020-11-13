@@ -1,5 +1,5 @@
 <h1 align="center">TotemUFSM</h1>
-<h3 align="center">Vision system for covid control totens inside UFSM.</h3>
+<h3 align="center">Vision system for covid control totems inside UFSM.</h3>
 
 <p align="center"> 
   <img src="https://img.shields.io/badge/PyTorch-v1.6.0-blue"/>
