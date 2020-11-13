@@ -46,7 +46,7 @@ python3 totem.py
  <a>The bouding box image and the log.csv will be appear inside the output folder.</a>
 </p>
 
-## Examples
+## Example
 
 <p align="center"> 
   <img src="media/example.gif" alt="TotemUFSM"/>
