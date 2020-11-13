@@ -49,8 +49,7 @@ python3 totem.py
 ## Examples
 
 <p align="center"> 
-  <img src="media/example1.jpg" alt="TotemUFSM1"/>
-  <img src="media/example2.jpg" alt="TotemUFSM2"/>
+  <img src="media/example.gif" alt="TotemUFSM"/>
 </p>  
 
 ## References
